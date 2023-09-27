@@ -1,6 +1,6 @@
 ﻿namespace AppConfig.Abstract;
 
-public interface IConnectionData
+public interface IDBConnectionData
 {
     public static ConnectionTypeName TypeName { get; }
     public string ConnectionType { get; set; }

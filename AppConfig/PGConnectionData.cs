@@ -1,9 +1,9 @@
 ﻿using AppConfig.Abstract;
-using static AppConfig.Abstract.IConnectionData;
+using static AppConfig.Abstract.IDBConnectionData;
 
 namespace AppConfig;
 
-public sealed class PGConnectionData : IConnectionData
+public sealed class PGConnectionData : IDBConnectionData
 {
     public const ConnectionTypeName TypeName = ConnectionTypeName.PG;
     public string ConnectionType { get; set; }

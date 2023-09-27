@@ -1,7 +1,7 @@
 ﻿using AppConfig.Abstract;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static AppConfig.Abstract.IConnectionData;
+using static AppConfig.Abstract.IDBConnectionData;
 
 namespace AppConfig.Converters;
 
@@ -9,7 +9,7 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType)
     {
-        return objectType == typeof(IConnectionData);
+        return objectType == typeof(IDBConnectionData);
     }
 
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
