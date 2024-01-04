@@ -10,14 +10,49 @@ public sealed class DBConnectionFactory
     {
         string? connectionType = configuration.GetSection("ConnectionType").Value;
 
+        if (connectionType == ConnectionTypeName.SQS.ToString())
+            return CastSQSConnectionData(configuration, connectionType);
+
         if (connectionType == ConnectionTypeName.SQSTrusted.ToString())
             return CastSQSTrustedConnection(configuration, connectionType);
 
         if (connectionType == ConnectionTypeName.PG.ToString())
             return CastPGConnection(configuration, connectionType);
 
-        throw new NotImplementedException();
+        throw new NotImplementedException("There is no casting method for the specified connection type.");
     }
+
+    private static SQSConnectionData CastSQSConnectionData(IConfiguration configuration, string connectionType)
+    {
+		string? server = configuration.GetSection("Server").Value;
+
+		if (string.IsNullOrWhiteSpace(server))
+			throw new NullReferenceException("Server not specified");
+
+		string? database = configuration.GetSection("Database").Value;
+
+		if (string.IsNullOrWhiteSpace(database))
+			throw new NullReferenceException("Database not specified");
+
+		string? userId = configuration.GetSection("UserId").Value;
+
+		if (string.IsNullOrWhiteSpace(userId))
+			throw new NullReferenceException("User id not specified");
+
+		string? password = configuration.GetSection("Password").Value;
+
+		if (string.IsNullOrWhiteSpace(password))
+			throw new NullReferenceException("Password is not specified");
+
+		return new SQSConnectionData()
+		{
+			ConnectionType = connectionType,
+			Server = server,
+			Database = database,
+			UserId = userId,
+			Password = password
+		};
+	}
 
     private static SQSTrustedConnectionData CastSQSTrustedConnection(IConfigurationSection configuration, string connectionType)
     {
@@ -46,12 +81,15 @@ public sealed class DBConnectionFactory
         if (string.IsNullOrWhiteSpace(server))
             throw new NullReferenceException("Server not specified");
 
-        string? port = configuration.GetSection("Port").Value;
+        string? portStr = configuration.GetSection("Port").Value;
 
-        if (string.IsNullOrWhiteSpace(port))
+        if (string.IsNullOrWhiteSpace(portStr))
             throw new NullReferenceException("Port not specified");
 
-        string? database = configuration.GetSection("Database").Value;
+        if(int.TryParse(portStr, out int port))
+			throw new FormatException("Port is not in the right format");
+
+		string? database = configuration.GetSection("Database").Value;
 
         if (string.IsNullOrWhiteSpace(database))
             throw new NullReferenceException("Database not specified");

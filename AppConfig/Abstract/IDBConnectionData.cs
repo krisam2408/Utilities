@@ -9,6 +9,7 @@ public interface IDBConnectionData
     public enum ConnectionTypeName
     {
         PG,
+        SQS,
         SQSTrusted
     }
 }

@@ -21,6 +21,9 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
         if (string.IsNullOrWhiteSpace(connectionType))
             throw new JsonException("Connection type not specified");
 
+        if (connectionType == ConnectionTypeName.SQS.ToString())
+            return CastSQSConnection(obj, connectionType);
+        
         if (connectionType == ConnectionTypeName.SQSTrusted.ToString())
             return CastSQSTrustedConnection(obj, connectionType);
 
@@ -30,7 +33,39 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
         throw new JsonException("A valid deserialization type not found");
     }
 
-    private static SQSTrustedConnectionData CastSQSTrustedConnection(JObject obj, string connectionType)
+	private static SQSConnectionData CastSQSConnection(JObject obj, string connectionType)
+	{
+		string? server = (string?)obj["Server"];
+
+		if (string.IsNullOrWhiteSpace(server))
+			throw new JsonException("Server not specified");
+
+		string? database = (string?)obj["Database"];
+
+		if (string.IsNullOrWhiteSpace(database))
+			throw new JsonException("Database not specified");
+
+		string? userId = (string?)obj["UserId"];
+
+		if (string.IsNullOrWhiteSpace(userId))
+			throw new JsonException("User id not specified");
+
+		string? password = (string?)obj["Password"];
+
+		if (string.IsNullOrWhiteSpace(password))
+			throw new JsonException("Password not specified");
+
+		return new SQSConnectionData()
+		{
+			ConnectionType = connectionType,
+			Server = server,
+			Database = database,
+			UserId = userId,
+			Password = password
+		};
+	}
+
+	private static SQSTrustedConnectionData CastSQSTrustedConnection(JObject obj, string connectionType)
     {
         string? source = (string?)obj["Source"];
 
@@ -57,12 +92,15 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
         if (string.IsNullOrWhiteSpace(server))
             throw new JsonException("Server not specified");
 
-        string? port = (string?)obj["Port"];
+        string? portStr = (string?)obj["Port"];
 
-        if (string.IsNullOrWhiteSpace(port))
+        if (string.IsNullOrWhiteSpace(portStr))
             throw new JsonException("Port not specified");
 
-        string? database = (string?)obj["Database"];
+        if(!int.TryParse(portStr, out int port))
+			throw new JsonException("Port must be integer");
+
+		string? database = (string?)obj["Database"];
 
         if (string.IsNullOrWhiteSpace(database))
             throw new JsonException("Database not specified");
