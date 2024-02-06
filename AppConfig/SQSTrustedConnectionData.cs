@@ -5,7 +5,7 @@ namespace AppConfig;
 
 public sealed class SQSTrustedConnectionData : IDBConnectionData
 {
-    public const ConnectionTypeName TypeName = ConnectionTypeName.PG;
+    public const ConnectionTypeName TypeName = ConnectionTypeName.SQSTrusted;
     public string ConnectionType { get; set; }
 
     public string Source { get; set; }
