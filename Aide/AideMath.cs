@@ -24,4 +24,26 @@ public static class AideMath
             return max;
         return value;
     }
+
+    public static bool BetweenExc(this int value, int min, int max)
+    {
+        bool[] conditions =
+        {
+            value < min,
+            value > max,
+        };
+
+        return !AideBool.AndCheck(conditions);
+    }
+
+    public static bool BetweenInc(this int value, int min, int max)
+    {
+        bool[] conditions =
+        {
+            value >= min,
+            value <= max,
+        };
+
+        return AideBool.AndCheck(conditions);
+    }
 }
