@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppConfig", "AppConfig\AppC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrixPost", "StrixPost\StrixPost.csproj", "{FAC424C4-925A-4F5D-AAC4-EFF0F32D80EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalWrapper", "TerminalWrapper\TerminalWrapper.csproj", "{0FB98FE7-D0E1-49AF-9696-C481827AA393}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TerminalWrapper", "TerminalWrapper\TerminalWrapper.csproj", "{0FB98FE7-D0E1-49AF-9696-C481827AA393}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorganaChains", "MorganaChains\MorganaChains.csproj", "{B4E88701-2157-491F-95F7-C44457ADBA67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0FB98FE7-D0E1-49AF-9696-C481827AA393}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB98FE7-D0E1-49AF-9696-C481827AA393}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB98FE7-D0E1-49AF-9696-C481827AA393}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E88701-2157-491F-95F7-C44457ADBA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E88701-2157-491F-95F7-C44457ADBA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E88701-2157-491F-95F7-C44457ADBA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E88701-2157-491F-95F7-C44457ADBA67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,4 +24,18 @@ public static class AideMath
             return max;
         return value;
     }
+
+    public static bool BetweenInc(this int value, int min, int max)
+    {
+        if(value >= min && value <= max)
+            return true;
+        return false;
+    }
+
+    public static bool BetweenExc(this int value, int min, int max)
+    {
+        if(value > min && value < max)
+            return true;
+        return false;
+    }
 }
