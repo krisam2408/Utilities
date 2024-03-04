@@ -9,7 +9,6 @@ public sealed class Morgana
     public byte[] PublicKey { get; private set; }
 
     private static Morgana m_instance;
-
     public static Morgana Instance
     {
         get
