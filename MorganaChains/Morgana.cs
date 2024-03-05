@@ -19,12 +19,12 @@ public sealed class Morgana
         }
     }
 
-    public static void Initialize(ParallelSettings settings)
+    public static void Initialize(MorganaParallelSettings settings)
     {
         m_instance = new Morgana(settings);
     }
 
-    private Morgana(ParallelSettings settings)
+    private Morgana(MorganaParallelSettings settings)
     {
         SecretKey = Encoding.UTF8.GetBytes(settings.SecretKey);
         PublicKey = Encoding.UTF8.GetBytes(settings.PublicKey);

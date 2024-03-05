@@ -2,12 +2,14 @@
 
 namespace MorganaChains;
 
-public sealed class ParallelSettings
+public sealed class MorganaParallelSettings
 {
     public string PublicKey { get; private set; }
     public string SecretKey { get; private set; }
 
-    public ParallelSettings(IConfigurationSection configuration)
+    public MorganaParallelSettings() { }
+
+    public MorganaParallelSettings(IConfigurationSection configuration)
     {
         string? secretKey = configuration.GetSection("SecretKey").Value;
         string? publicKey = configuration.GetSection("PublicKey").Value;
