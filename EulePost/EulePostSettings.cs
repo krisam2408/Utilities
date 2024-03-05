@@ -1,6 +1,6 @@
-﻿namespace StrixPost;
+﻿namespace EulePost;
 
-public struct StrixPostSettings
+public struct EulePostSettings
 {
     public string EmailAddress { get; set; }
     public string Password { get; set; }
