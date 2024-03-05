@@ -1,4 +1,4 @@
-﻿namespace AppConfig.Abstract;
+﻿namespace DBConfig.Abstract;
 
 public interface IDBConnectionData
 {

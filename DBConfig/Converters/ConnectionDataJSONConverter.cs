@@ -1,9 +1,9 @@
-﻿using AppConfig.Abstract;
+﻿using DBConfig.Abstract;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static AppConfig.Abstract.IDBConnectionData;
+using static DBConfig.Abstract.IDBConnectionData;
 
-namespace AppConfig.Converters;
+namespace DBConfig.Converters;
 
 public sealed class ConnectionDataJSONConverter : JsonConverter
 {

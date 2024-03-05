@@ -1,8 +1,8 @@
-﻿using AppConfig.Abstract;
+﻿using DBConfig.Abstract;
 using Microsoft.Extensions.Configuration;
-using static AppConfig.Abstract.IDBConnectionData;
+using static DBConfig.Abstract.IDBConnectionData;
 
-namespace AppConfig.Factory;
+namespace DBConfig.Factory;
 
 public sealed class DBConnectionFactory
 {

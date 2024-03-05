@@ -1,4 +1,4 @@
-﻿namespace AppConfig;
+﻿namespace DBConfig;
 
 public class GoogleAuthenticationSettings
 {

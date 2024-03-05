@@ -1,7 +1,7 @@
-﻿using AppConfig.Abstract;
-using static AppConfig.Abstract.IDBConnectionData;
+﻿using DBConfig.Abstract;
+using static DBConfig.Abstract.IDBConnectionData;
 
-namespace AppConfig;
+namespace DBConfig;
 
 public sealed class SQSConnectionData : IDBConnectionData
 {
