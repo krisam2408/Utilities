@@ -25,9 +25,12 @@ public sealed class DBConnectionFactory
     private static SQSConnectionData CastSQSConnectionData(IConfiguration configuration, string connectionType)
     {
         string? server = configuration.GetSection("Server").Value;
-
         if (string.IsNullOrWhiteSpace(server))
             throw new NullReferenceException("Server not specified");
+
+        string? port = configuration.GetSection("Port").Value;
+        if (string.IsNullOrWhiteSpace(port))
+            port = "";
 
         string? database = configuration.GetSection("Database").Value;
 
@@ -48,6 +51,7 @@ public sealed class DBConnectionFactory
         {
             ConnectionType = connectionType,
             Server = server,
+            Port = port,
             Database = database,
             UserId = userId,
             Password = password

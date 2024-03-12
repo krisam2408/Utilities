@@ -40,6 +40,11 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
         if (string.IsNullOrWhiteSpace(server))
             throw new JsonException("Server not specified");
 
+        string? port = (string?)obj["Port"];
+
+        if (string.IsNullOrWhiteSpace(port))
+            port = "";
+
         string? database = (string?)obj["Database"];
 
         if (string.IsNullOrWhiteSpace(database))
@@ -59,6 +64,7 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
         {
             ConnectionType = connectionType,
             Server = server,
+            Port = port,
             Database = database,
             UserId = userId,
             Password = password
