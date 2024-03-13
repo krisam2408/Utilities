@@ -59,11 +59,11 @@ public sealed class Morgana
         }
     }
 
-    public static string GeneratePassword()
+    public string GeneratePassword()
     {
         string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new();
-        int len = random.Next(5, 10);
+        int len = random.Next(8, 12);
 
         StringBuilder sb = new();
 

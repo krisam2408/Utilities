@@ -33,6 +33,9 @@ public sealed class PostEule
 
     public async Task SendAsync(MailContactCollection contacts, string subject, StringBuilder body)
     {
+        if (!IsValid())
+            return;
+
         MimeMessage message = new();
 
         message.SetMessageContacts(contacts);
@@ -46,6 +49,9 @@ public sealed class PostEule
 
     public async Task SendAsync(MailContactCollection contacts, string subject, StringBuilder body, IAttachment[] attachments)
     {
+        if (!IsValid())
+            return;
+
         MimeMessage message = new();
 
         message.SetMessageContacts(contacts);
@@ -55,5 +61,21 @@ public sealed class PostEule
         message.SetBody(body, attachments);
 
         await SendAsync(message);
+    }
+
+    private bool IsValid()
+    {
+        string[] emailParts = m_emailAddress.Split('@');
+        if (emailParts.Length != 2)
+            return false;
+
+        if (emailParts[1].IndexOf('.') == -1) 
+            return false;
+
+        if(string.IsNullOrWhiteSpace(m_password))
+            return false;
+
+
+        return true;
     }
 }
