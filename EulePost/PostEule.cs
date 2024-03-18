@@ -24,7 +24,7 @@ public sealed class PostEule
     {
         using (SmtpClient smtp = new())
         {
-            await smtp.ConnectAsync(m_host, m_port, SecureSocketOptions.SslOnConnect);
+            await smtp.ConnectAsync(m_host, m_port, options: SecureSocketOptions.Auto);
             await smtp.AuthenticateAsync(m_emailAddress, m_password);
             await smtp.SendAsync(message);
             await smtp.DisconnectAsync(true);
