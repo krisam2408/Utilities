@@ -5,7 +5,7 @@ namespace SpiegelHase.Interfaces;
 
 public abstract class BaseViewModel
 {
-    public List<Message> Messages { get; set; }
+    public List<Message> Messages { get; set; } = new();
 
     public void AddSuccessMessage(string message)
     {

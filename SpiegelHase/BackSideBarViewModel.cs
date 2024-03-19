@@ -1,10 +1,11 @@
-﻿using SpiegelHase.Interfaces;
+﻿using SpiegelHase.Attributes;
+using SpiegelHase.Interfaces;
 
 namespace SpiegelHase;
 
 public class BackSideBarViewModel : BaseViewModel, IBackSidebar
 {
-    public string BackController { get; set; }
-    public string BackAction { get; set; }
-    public string? BackId { get; set; }
+    [Ignorable] public string BackController { get; set; }
+    [Ignorable] public string BackAction { get; set; }
+    [Ignorable] public string? BackId { get; set; }
 }

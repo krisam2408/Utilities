@@ -13,8 +13,9 @@ public static class ViewModelExtension
     private static readonly Dictionary<string, string> ErrorTranslation = new()
     {
         { "0", "Ha ocurrido un error" },
-        { "field is required", "El campo &apos;{0}&apos; debe ser llenado" },
+        { "field is required", "El campo &apos;{0}&apos; es requerido" },
         { "e-mail address", "El campo &apos;{0}&apos; tiene que ser un correo electrónico válido" },
+        { "rut format", "El campo &apos;{0}&apos; no es un Rut válido" }
     };
 
     private static string HandleMessage(string errorMessage)
@@ -156,9 +157,9 @@ public static class ViewModelExtension
         model.MaxPages = maxPages;
     }
 
-    public static void SetUserRolesModelAsync<TType, TKey>(this IUserRoles<TType> model, TKey key, Func<TKey, List<TType>> predicate)
+    public static async Task SetUserRolesModel<TType, TKey>(this IUserRoles<TType> model, TKey key, Func<TKey, Task<List<TType>>> predicate)
     {
-        List<TType> roles = predicate.Invoke(key);
+        List<TType> roles = await predicate.Invoke(key);
 
         model.Roles = roles;
     }
