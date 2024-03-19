@@ -1,4 +1,4 @@
-﻿using SpiegelHase.Attributes;
+﻿using SpiegelHase.DataAnnotations;
 using SpiegelHase.Interfaces;
 
 namespace SpiegelHase;

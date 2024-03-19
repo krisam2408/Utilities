@@ -1,7 +1,7 @@
 ﻿using Aide;
 using System.ComponentModel.DataAnnotations;
 
-namespace SpiegelHase.Attributes;
+namespace SpiegelHase.DataAnnotations;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
 public sealed class RutAttribute : ValidationAttribute

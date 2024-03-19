@@ -1,6 +1,6 @@
 ﻿using Aide;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using SpiegelHase.Attributes;
+using SpiegelHase.DataAnnotations;
 using SpiegelHase.DataTransfer;
 using SpiegelHase.Interfaces;
 using System.ComponentModel;
