@@ -61,6 +61,18 @@ public static class ViewModelExtension
         return attr.DisplayName;
     }
 
+    public static void TransferMessages(this BaseViewModel receptorModel, BaseViewModel originalModel)
+    {
+        foreach(Message ogMsg in originalModel.Messages)
+        {
+            foreach(Message rMsg in receptorModel.Messages)
+                if (rMsg.Content == ogMsg.Content)
+                    continue;
+
+            receptorModel.Messages.Add(ogMsg);
+        }
+    }
+
     public static void RemoveIgnorable(this ModelStateDictionary modelState, BaseViewModel model)
     {
         PropertyInfo[] properties = model

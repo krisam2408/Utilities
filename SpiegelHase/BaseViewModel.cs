@@ -1,23 +1,38 @@
 ﻿using Newtonsoft.Json;
 using SpiegelHase.DataTransfer;
 
-namespace SpiegelHase.Interfaces;
+namespace SpiegelHase;
 
-public abstract class BaseViewModel
+public class BaseViewModel
 {
     public List<Message> Messages { get; set; } = new();
 
     public void AddSuccessMessage(string message)
     {
-        Messages.Add(new(message, "Success"));
+        AddMessage(new(message, "Success"));
+    }
+
+    public void AddInfoMessage(string message)
+    {
+        AddMessage(new(message, "Info"));
+    }
+
+    public void AddWarningMessage(string message)
+    {
+        AddMessage(new(message, "Warning"));
     }
 
     public void AddErrorMessage(string message)
     {
-        Messages.Add(new(message, "Error"));
+        AddMessage(new(message, "Error"));
     }
 
-    public string SerializedMessages()
+    protected virtual void AddMessage(Message message)
+    {
+        Messages.Add(message);
+    }
+
+    public string GetSerializedMessages()
     {
         return JsonConvert.SerializeObject(Messages);
     }
