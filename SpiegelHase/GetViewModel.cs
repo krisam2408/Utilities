@@ -1,10 +1,12 @@
-﻿using SpiegelHase.DataTransfer;
+﻿using Newtonsoft.Json;
+using SpiegelHase.DataAnnotations;
+using SpiegelHase.DataTransfer;
 
 namespace SpiegelHase;
 
 public class GetViewModel : BaseViewModel
 {
-    public string MessageString { get; set; }
+    [Ignorable] public string MessageString { get; set; }
 
     protected override void AddMessage(Message message)
     {
@@ -14,6 +16,11 @@ public class GetViewModel : BaseViewModel
 
     public void Initialize()
     {
-        MessageString = GetSerializedMessages();
+        if(!string.IsNullOrWhiteSpace(MessageString))
+        {
+            List<Message>? list = JsonConvert.DeserializeObject<List<Message>>(MessageString);
+            if (list != null)
+                Messages = list;
+        }
     }
 }

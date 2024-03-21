@@ -9,9 +9,9 @@ public class BackParameter
     public string? BackId 
     {
         get { return m_backId; }
-        private set 
+        set 
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if(string.IsNullOrWhiteSpace(value))
             {
                 m_backId = null;
                 return;
@@ -19,11 +19,11 @@ public class BackParameter
             m_backId = value;
         }
     }
-
+    
     public BackParameter(string controller, string action = "index", string back = "")
     {
         BackController = controller;
         BackAction = action;
-        BackAction = back;
+        BackId = back;
     }
 }

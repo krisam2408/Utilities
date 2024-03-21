@@ -128,7 +128,10 @@ public static class ViewModelExtension
             return new(fallbackController, fallbackAction, fallbackBackId);
 
         if (backParts.Length == 3)
-            return new(backParts[0], backParts[1], backParts[2]);
+        {
+            BackParameter fullResult = new(backParts[0], backParts[1], backParts[2]);
+            return fullResult;
+        }
 
         return new(backParts[0], backParts[1]);
     }
