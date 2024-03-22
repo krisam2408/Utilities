@@ -10,69 +10,6 @@ namespace SpiegelHase.Extensions;
 
 public static class ViewModelExtension
 {
-    private static readonly Dictionary<string, string> ErrorTranslation = new()
-    {
-        { "0", "Ha ocurrido un error" },
-        { "field is required", "El campo &apos;{0}&apos; es requerido" },
-        { "e-mail address", "El campo &apos;{0}&apos; tiene que ser un correo electrónico válido" },
-        { "rut format", "El campo &apos;{0}&apos; no es un Rut válido" }
-    };
-
-    private static string HandleMessage(string errorMessage)
-    {
-        foreach (KeyValuePair<string, string> kv in ErrorTranslation)
-            if (errorMessage.Contains(kv.Key))
-                return kv.Value;
-        return ErrorTranslation["0"];
-    }
-
-    public static void SetModelMessages(this BaseViewModel model, ModelStateDictionary modelState)
-    {
-        foreach (KeyValuePair<string, ModelStateEntry> kv in modelState)
-        {
-            if (kv.Value.ValidationState == ModelValidationState.Valid)
-                continue;
-
-            string display = GetPropertyDisplay(model, kv.Key);
-
-            foreach (ModelError error in kv.Value.Errors)
-            {
-                string message = HandleMessage(error.ErrorMessage);
-                string result = string.Format(message, display);
-                model.AddErrorMessage(result);
-            }
-        }
-    }
-
-    private static string GetPropertyDisplay(BaseViewModel model, string propertyName)
-    {
-        PropertyInfo? key = model
-            .GetType()
-            .GetProperty(propertyName);
-
-        if (key == null)
-            return propertyName;
-
-        DisplayNameAttribute? attr = key.GetCustomAttribute<DisplayNameAttribute>();
-
-        if (attr == null)
-            return propertyName;
-
-        return attr.DisplayName;
-    }
-
-    public static void TransferMessages(this BaseViewModel receptorModel, BaseViewModel originalModel)
-    {
-        foreach(Message ogMsg in originalModel.Messages)
-        {
-            foreach(Message rMsg in receptorModel.Messages)
-                if (rMsg.Content == ogMsg.Content)
-                    continue;
-
-            receptorModel.Messages.Add(ogMsg);
-        }
-    }
-
     public static void RemoveIgnorable(this ModelStateDictionary modelState, BaseViewModel model)
     {
         PropertyInfo[] properties = model
@@ -91,34 +28,6 @@ public static class ViewModelExtension
 
         foreach (string name in ignorable)
             modelState.Remove(name);
-    }
-
-    public static void SetBackSidebarModel(this IBackSidebar model, string controllerName, string actionName = "index", string backId = "")
-    {
-        model.BackController = controllerName;
-        model.BackAction = actionName;
-        model.BackId = backId;
-        if (string.IsNullOrWhiteSpace(backId))
-            model.BackId = null;
-    }
-
-    public static void SetBackSidebarModel(this IBackSidebar model, BackParameter parameter)
-    {
-        model.BackController = parameter.BackController;
-        model.BackAction = parameter.BackAction;
-        model.BackId = parameter.BackId;
-    }
-
-    public static void SetForwardSidebarModel(this IForwardSidebar model, string forwardId, string controllerName, string actionName = "index", string backId = "")
-    {
-        model.ForwardId = forwardId;
-        model.SetBackSidebarModel(controllerName, actionName, backId);
-    }
-
-    public static void SetForwardSidebarModel(this IForwardSidebar model, ForwardParameter parameter)
-    {
-        model.ForwardId = parameter.ForwardId;
-        model.SetBackSidebarModel(parameter);
     }
 
     public static BackParameter HandleBackParameter(this string back, string fallbackController, string fallbackAction = "index", string fallbackBackId = "")

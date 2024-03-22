@@ -11,6 +11,7 @@ public sealed class PostEule
     private readonly string m_password;
     private readonly string m_host;
     private readonly int m_port;
+    private readonly SecureSocketOptions m_sso;
 
     public PostEule(EulePostSettings settings)
     {
@@ -18,13 +19,20 @@ public sealed class PostEule
         m_password = settings.Password;
         m_host = settings.Host;
         m_port = settings.Port;
+
+        m_sso = settings.SSO switch
+        {
+            "SSL" => SecureSocketOptions.SslOnConnect,
+            "TLS" => SecureSocketOptions.StartTls,
+            _ => SecureSocketOptions.None
+        };
     }
 
     private async Task SendAsync(MimeMessage message)
     {
         using (SmtpClient smtp = new())
         {
-            await smtp.ConnectAsync(m_host, m_port, options: SecureSocketOptions.Auto);
+            await smtp.ConnectAsync(m_host, m_port, options: m_sso);
             await smtp.AuthenticateAsync(m_emailAddress, m_password);
             await smtp.SendAsync(message);
             await smtp.DisconnectAsync(true);

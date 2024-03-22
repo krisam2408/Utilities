@@ -8,6 +8,7 @@ public sealed class EulePostSettings
     public string Password { get; set; }
     public string Host { get; set; }
     public int Port { get; set; }
+    public string SSO { get; set; }
 
     public EulePostSettings() { }
 
@@ -17,6 +18,7 @@ public sealed class EulePostSettings
         string? password = configuration.GetSection("Password").Value;
         string? host = configuration.GetSection("Host").Value;
         string? port = configuration.GetSection("Port").Value;
+        string? sso = configuration.GetSection("SSO").Value;
 
         if(string.IsNullOrWhiteSpace(email))
             throw new NullReferenceException(nameof(email));
@@ -27,12 +29,16 @@ public sealed class EulePostSettings
         if(string.IsNullOrWhiteSpace(host))
             throw new NullReferenceException(nameof(host));
 
+        if (string.IsNullOrWhiteSpace(sso))
+            sso = "NONE";
+
         if(int.TryParse(port, out int portNum))
         {
             EmailAddress = email;
             Password = password;
             Host = host;
             Port = portNum;
+            SSO = sso;
             return;
         }
 
