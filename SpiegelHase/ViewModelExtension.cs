@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SpiegelHase.DataAnnotations;
 using SpiegelHase.DataTransfer;
 using SpiegelHase.Interfaces;
-using System.ComponentModel;
 using System.Reflection;
 
-namespace SpiegelHase.Extensions;
+namespace SpiegelHase;
 
 public static class ViewModelExtension
 {
@@ -30,25 +29,84 @@ public static class ViewModelExtension
             modelState.Remove(name);
     }
 
-    public static BackParameter HandleBackParameter(this string back, string fallbackController, string fallbackAction = "index", string fallbackBackId = "")
+    public static string GetBackParameter(this IBackSidebar model)
     {
-        string[] backParts = back.Split('/');
-        if(!AideMath.BetweenInc(backParts.Length, 2, 3))
+        List<string> parts = new()
+        {
+            model.BackController,
+            model.BackAction
+        };
+
+        if(!string.IsNullOrWhiteSpace(model.BackId))
+            parts.Add(model.BackId);
+
+        string result = "";
+        foreach(string part in parts)
+            result += $"/{part}";
+
+        return result;
+    }
+
+    public static void SetBackSidebarModel(this IBackSidebar model, string controllerName, string actionName = "index", string backId = "")
+    {
+        model.BackController = controllerName;
+        model.BackAction = actionName;
+        model.BackId = backId;
+        if (string.IsNullOrWhiteSpace(backId))
+            model.BackId = null;
+    }
+
+    public static void SetBackSidebarModel(this IBackSidebar model, BackParameter parameter)
+    {
+        model.BackController = parameter.BackController;
+        model.BackAction = parameter.BackAction;
+        model.BackId = parameter.BackId;
+    }
+
+    public static void SetForwardSidebarModel(this IForwardSidebar model, string forwardId, string controllerName, string actionName = "index", string backId = "")
+    {
+        model.ForwardId = forwardId;
+        model.SetBackSidebarModel(controllerName, actionName, backId);
+    }
+
+    public static void SetForwardSidebarModel(this IForwardSidebar model, ForwardParameter parameter)
+    {
+        model.ForwardId = parameter.ForwardId;
+        model.SetBackSidebarModel(parameter);
+    }
+
+    public static BackParameter HandleBackParameter(this string? back, string fallbackController, string fallbackAction = "index", string fallbackBackId = "")
+    {
+        if (string.IsNullOrWhiteSpace(back))
             return new(fallbackController, fallbackAction, fallbackBackId);
+
+        string[] backParts = back.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        if(backParts.Length == 0 )
+            return new(fallbackController, fallbackAction, fallbackBackId);
+
+        BackParameter result;
+
+        if(backParts.Length == 2)
+        {
+            result = new(backParts[0], backParts[1]);
+            return result;
+        }
 
         if (backParts.Length == 3)
         {
-            BackParameter fullResult = new(backParts[0], backParts[1], backParts[2]);
-            return fullResult;
+            result = new(backParts[0], backParts[1], backParts[2]);
+            return result;
         }
 
-        return new(backParts[0], backParts[1]);
+        result = new(backParts[0]);
+        return result;
     }
 
     public static BackParameter HandleBackParameter(this string back, BackParameter fallback)
     {
         string[] backParts = back.Split('/');
-        if(!AideMath.BetweenInc(backParts.Length, 2, 3))
+        if (!backParts.Length.BetweenInc(2, 3))
             return fallback;
 
         if (backParts.Length == 3)
@@ -64,6 +122,7 @@ public static class ViewModelExtension
 
     public static void SetPaginationModel<T>(this IPagination<T> model, int currentPage, int itemsPerPage)
     {
+        model.TotalItems = model.List.Length;
         int start = (currentPage - 1) * itemsPerPage;
         int end = start + itemsPerPage;
         Range range = new(start, end);
