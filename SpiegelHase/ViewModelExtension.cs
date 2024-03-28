@@ -9,7 +9,7 @@ namespace SpiegelHase;
 
 public static class ViewModelExtension
 {
-    public static void RemoveIgnorable(this ModelStateDictionary modelState, BaseViewModel model)
+    public static void RemoveIgnorable(this BaseViewModel model, ModelStateDictionary modelState)
     {
         PropertyInfo[] properties = model
             .GetType()
