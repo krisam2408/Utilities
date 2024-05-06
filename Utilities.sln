@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MorganaChains", "MorganaCha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EulePost", "EulePost\EulePost.csproj", "{13DAB89C-64E6-4B6C-9710-4239ADD24FEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiegelHase", "SpiegelHase\SpiegelHase.csproj", "{04BF13BF-2415-4ACE-9584-E609073190E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiegelHase", "SpiegelHase\SpiegelHase.csproj", "{04BF13BF-2415-4ACE-9584-E609073190E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaiSchatz", "MaiSchatz\MaiSchatz.csproj", "{2F18B4B4-39EA-460B-80FC-2048A192895D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{04BF13BF-2415-4ACE-9584-E609073190E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04BF13BF-2415-4ACE-9584-E609073190E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04BF13BF-2415-4ACE-9584-E609073190E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F18B4B4-39EA-460B-80FC-2048A192895D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F18B4B4-39EA-460B-80FC-2048A192895D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F18B4B4-39EA-460B-80FC-2048A192895D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F18B4B4-39EA-460B-80FC-2048A192895D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
