@@ -11,5 +11,5 @@ public sealed class SQSTrustedConnectionData : IDBConnectionData
     public string Source { get; set; }
     public string Database { get; set; }
 
-    public string ConnectionString => $"Data Source={Source};Initial Catalog={Database};Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+    public string ConnectionString => $"Data Source={Source};Initial Catalog={Database};Integrated Security=False;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 }

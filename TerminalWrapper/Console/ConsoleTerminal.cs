@@ -2,11 +2,16 @@
 
 public sealed class ConsoleTerminal : Terminal
 {
-    private ConsoleTerminal() : base() { }
+    private readonly int m_separatorLength;
 
-    public static ConsoleTerminal CreateTerminal(MainTask[] tasks)
+    private ConsoleTerminal(int sepLength) : base() 
     {
-        ConsoleTerminal result = new();
+        m_separatorLength = sepLength;
+    }
+
+    public static ConsoleTerminal CreateTerminal(MainTask[] tasks, int sepLength = 100)
+    {
+        ConsoleTerminal result = new(sepLength);
 
         int len = tasks.Length;
         result.ExitCommand = len + 1;
@@ -45,7 +50,7 @@ public sealed class ConsoleTerminal : Terminal
 
     public override async Task SeparatorAsync()
     {
-        await WriteAsync(string.Empty.PadLeft(50, '='));
+        await WriteAsync(string.Empty.PadLeft(m_separatorLength, '-'));
     }
 
     public override async Task WriteAsync(string text)

@@ -7,7 +7,6 @@ public sealed class SQSConnectionData : IDBConnectionData
 {
     public const ConnectionTypeName TypeName = ConnectionTypeName.SQS;
     public string ConnectionType { get; set; }
-
     public string Server { get; set; }
     public string Port { get; set; }
     public string Database { get; set; }
