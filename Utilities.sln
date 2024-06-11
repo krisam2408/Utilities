@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiegelHase", "SpiegelHase\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaiSchatz", "MaiSchatz\MaiSchatz.csproj", "{2F18B4B4-39EA-460B-80FC-2048A192895D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonTasks", "CommonTasks\CommonTasks.csproj", "{923D55B9-92C4-408C-AAC1-547D520E8A24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonTasks", "CommonTasks\CommonTasks.csproj", "{923D55B9-92C4-408C-AAC1-547D520E8A24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVMCore", "MVVMCore\MVVMCore.csproj", "{2E7E587C-AC08-4202-BA02-09F9767BE6B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{923D55B9-92C4-408C-AAC1-547D520E8A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{923D55B9-92C4-408C-AAC1-547D520E8A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{923D55B9-92C4-408C-AAC1-547D520E8A24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7E587C-AC08-4202-BA02-09F9767BE6B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7E587C-AC08-4202-BA02-09F9767BE6B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7E587C-AC08-4202-BA02-09F9767BE6B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7E587C-AC08-4202-BA02-09F9767BE6B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
