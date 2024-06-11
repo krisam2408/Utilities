@@ -10,16 +10,32 @@ public sealed class DBConnectionFactory
     {
         string? connectionType = configuration.GetSection("ConnectionType").Value;
 
+        if(connectionType == ConnectionTypeName.ConnectionString.ToString())
+            return CastStringConnectionData(configuration, connectionType);
+
         if (connectionType == ConnectionTypeName.SQS.ToString())
             return CastSQSConnectionData(configuration, connectionType);
 
         if (connectionType == ConnectionTypeName.SQSTrusted.ToString())
-            return CastSQSTrustedConnection(configuration, connectionType);
+            return CastSQSTrustedConnectionData(configuration, connectionType);
 
         if (connectionType == ConnectionTypeName.PG.ToString())
-            return CastPGConnection(configuration, connectionType);
+            return CastPGConnectionData(configuration, connectionType);
 
         throw new NotImplementedException("There is no casting method for the specified connection type.");
+    }
+
+    private static StringConnectionData CastStringConnectionData(IConfiguration configuration, string connectionType)
+    {
+        string? connectionString = configuration.GetSection("Connection").Value;
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new NullReferenceException("Connection not specified");
+
+        return new StringConnectionData()
+        {
+            ConnectionType = connectionType,
+            Connection = connectionString
+        };
     }
 
     private static SQSConnectionData CastSQSConnectionData(IConfiguration configuration, string connectionType)
@@ -58,7 +74,7 @@ public sealed class DBConnectionFactory
         };
     }
 
-    private static SQSTrustedConnectionData CastSQSTrustedConnection(IConfigurationSection configuration, string connectionType)
+    private static SQSTrustedConnectionData CastSQSTrustedConnectionData(IConfigurationSection configuration, string connectionType)
     {
         string? source = configuration.GetSection("Source").Value;
 
@@ -78,7 +94,7 @@ public sealed class DBConnectionFactory
         };
     }
 
-    private static PGConnectionData CastPGConnection(IConfigurationSection configuration, string connectionType)
+    private static PGConnectionData CastPGConnectionData(IConfigurationSection configuration, string connectionType)
     {
         string? server = configuration.GetSection("Server").Value;
 
