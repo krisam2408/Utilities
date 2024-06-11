@@ -1,6 +1,7 @@
 ﻿using DBConfig.Abstract;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using static DBConfig.Abstract.IDBConnectionData;
 
 namespace DBConfig.Converters;
@@ -31,6 +32,20 @@ public sealed class ConnectionDataJSONConverter : JsonConverter
             return CastPGConnection(obj, connectionType);
 
         throw new JsonException("A valid deserialization type not found");
+    }
+
+    private static StringConnectionData CastStringConnection(JsonObject obj, string connectionType)
+    {
+        string? connectionString = (string?)obj["Connection"];
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new JsonException("Connection not specified");
+
+        return new StringConnectionData()
+        {
+            ConnectionType = connectionType,
+            Connection = connectionString,
+        };
     }
 
     private static SQSConnectionData CastSQSConnection(JObject obj, string connectionType)
