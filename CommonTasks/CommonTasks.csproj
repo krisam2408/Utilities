@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MorganaChains\MorganaChains.csproj" />
     <ProjectReference Include="..\TerminalWrapper\TerminalWrapper.csproj" />
   </ItemGroup>
 
