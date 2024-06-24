@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
 using SpiegelHase.DataTransfer;
+using SpiegelHase.Handlers;
 
 namespace SpiegelHase;
 
 public class BaseViewModel
 {
-    public List<Message> Messages { get; set; } = new();
+    public MessageHandler? MessageHandler { get; set; } = new();
 
     public void AddSuccessMessage(string message)
     {
@@ -30,14 +30,15 @@ public class BaseViewModel
 
     protected virtual void AddMessage(Message message)
     {
-        message.Content = message.Content
-            .Replace("'", "&apos;");
-        Messages.Add(message);
+        MessageHandler?.Add(message);
     }
 
     public string GetSerializedMessages()
     {
-        return JsonConvert.SerializeObject(Messages);
+        if(MessageHandler == null)
+            MessageHandler = new();
+
+        return MessageHandler.Serialize();
     }
 
     public bool HasInterface(Type interfaceType)
@@ -59,15 +60,11 @@ public class BaseViewModel
         }
     }
 
-    public void TransferMessages(BaseViewModel originalModel)
+    public virtual void TransferMessages(BaseViewModel originalModel)
     {
-        foreach (Message ogMsg in originalModel.Messages)
-        {
-            foreach (Message rMsg in Messages)
-                if (rMsg.Content == ogMsg.Content)
-                    continue;
+        if(MessageHandler == null)
+            MessageHandler = new();
 
-            Messages.Add(ogMsg);
-        }
+        MessageHandler.TransferMessages(originalModel.MessageHandler);
     }
 }

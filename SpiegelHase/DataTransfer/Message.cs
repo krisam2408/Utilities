@@ -7,7 +7,15 @@ public struct Message
 
     public Message(string content, string level)
     {
-        Content = content;
+        Content = CleanContent(content);
         Level = level.ToLower();
+    }
+
+    private static string CleanContent(string content)
+    {
+        content = content
+            .Replace("'", "&apos;");
+
+        return content;
     }
 }
