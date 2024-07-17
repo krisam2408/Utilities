@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace MVVMCore;
 
-public abstract class ObservableProperty : INotifyPropertyChanged
+public abstract class ObservableModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
