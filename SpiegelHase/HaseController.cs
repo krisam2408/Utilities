@@ -38,31 +38,31 @@ public abstract class HaseController : Controller
         return base.View(viewName);
     }
 
-    protected virtual new ViewResult View(object model)
+    protected virtual ViewResult View(BaseViewModel model)
     {
         CommonDataTransfer();
         return base.View(model);
     }
 
-    protected virtual async Task<ViewResult> ViewAsync(object model)
+    protected virtual async Task<ViewResult> ViewAsync(BaseViewModel model)
     {
         await CommonDataTransferAsync();
         return base.View(model);
     }
 
-    protected virtual new ViewResult View(string viewName, object model)
+    protected virtual ViewResult View(string viewName, BaseViewModel model)
     {
         CommonDataTransfer();
         return base.View(viewName, model);
     }
 
-    protected virtual async Task<ViewResult> ViewAsync(string viewName, object model)
+    protected virtual async Task<ViewResult> ViewAsync(string viewName, BaseViewModel model)
     {
         await CommonDataTransferAsync();
         return base.View(viewName, model);
     }
 
-    protected virtual new RedirectToActionResult RedirectToAction(string action, object model)
+    protected virtual RedirectToActionResult RedirectToAction(string action, BaseViewModel model)
     {
         if (model is GetViewModel getModel)
         {
@@ -72,7 +72,7 @@ public abstract class HaseController : Controller
         return base.RedirectToAction(action, model);
     }
 
-    protected virtual new RedirectToActionResult RedirectToAction(string action, string controller, object model)
+    protected virtual RedirectToActionResult RedirectToAction(string action, string controller, BaseViewModel model)
     {
         if (model is GetViewModel getModel)
         {
