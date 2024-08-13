@@ -1,4 +1,6 @@
-﻿namespace TerminalWrapper;
+﻿using Newtonsoft.Json;
+
+namespace TerminalWrapper;
 
 public abstract class Terminal
 {
@@ -6,21 +8,39 @@ public abstract class Terminal
     protected int Padding { get; set; }
     protected int ExitCommand { get; set; }
 
-    protected event Action? OnExit;
+    public event Action? OnStart;
+    public event Action? OnExit;
 
-    protected Terminal()
+    private readonly TerminalSettings m_settings;
+
+    protected Terminal(TerminalSettings settings)
     {
         Tasks = new();
+        m_settings = settings;
+    }
+
+    public static TerminalSettings? GetConfiguration<T>() where T : TerminalSettings
+    {
+        TerminalSettings? appSettings = null;
+
+        if (File.Exists("appsettings.json"))
+        {
+            string settings = File.ReadAllText("appsettings.json");
+            appSettings = JsonConvert.DeserializeObject<T>(settings);
+        }
+
+        return appSettings;
     }
 
     public virtual async Task RunAsync()
     {
+        OnStart?.Invoke();
         int currentInstruction = -1;
 
         do
         {
             await SeparatorAsync();
-            await WriteAsync("Choose your test");
+            await WriteAsync(m_settings.CommandsMessage);
             string key;
 
             foreach (KeyValuePair<int, MainTask> kv in Tasks)
@@ -31,7 +51,7 @@ public abstract class Terminal
 
             key = ExitCommand.ToString().PadLeft(Padding);
 
-            await WriteAsync($"  {key} -> Exit");
+            await WriteAsync($"  {key} -> {m_settings.ExitCommandMessage}");
             await SeparatorAsync();
 
             string? input = await ReadAsync();
@@ -59,7 +79,7 @@ public abstract class Terminal
         }
 
         await SeparatorAsync();
-        await WriteAsync("Invalid Options");
+        await WriteAsync(m_settings.InvalidOptionMessage);
 
         return -1;
     }
@@ -68,8 +88,9 @@ public abstract class Terminal
 
     public abstract Task WriteAsync(string text);
 
-    public abstract Task<string?> ReadAsync();
+    public abstract Task<string> ReadAsync();
 
     public abstract Task PauseAsync();
 
+    public abstract Task ClearAsync();
 }

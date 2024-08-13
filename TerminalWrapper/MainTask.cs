@@ -7,13 +7,13 @@ public abstract class MainTask
     {
         get
         {
-            if (m_terminal == null)
+            if (m_terminal is null)
                 throw new NullReferenceException("Terminal was not correctly set");
             return m_terminal;
         }
         internal set
         {
-            if(value != null)
+            if(value is not null)
                 m_terminal = value;
         }
     }

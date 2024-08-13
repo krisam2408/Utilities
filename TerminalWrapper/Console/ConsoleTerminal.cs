@@ -2,38 +2,52 @@
 
 public sealed class ConsoleTerminal : Terminal
 {
-    private readonly int m_separatorLength;
+    private readonly ConsoleTerminalSettings m_settings;
 
-    private ConsoleTerminal(int sepLength) : base() 
+    private ConsoleTerminal(ConsoleTerminalSettings settings) : base(settings) 
     {
-        m_separatorLength = sepLength;
+        m_settings = settings;
     }
 
-    public static ConsoleTerminal CreateTerminal(MainTask[] tasks, int sepLength = 100)
+    public static ConsoleTerminal CreateTerminal(IEnumerable<MainTask> tasks, ConsoleTerminalSettings configuration)
     {
-        ConsoleTerminal result = new(sepLength);
+        ConsoleTerminal result = new(configuration);
 
-        int len = tasks.Length;
+        MainTask[] taskArray = tasks.ToArray();
+
+        int len = taskArray.Length;
         result.ExitCommand = len + 1;
         result.Padding = result.ExitCommand.ToString().Length + 1;
 
-        for(int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++)
         {
-            MainTask t = tasks[i];
+            MainTask t = taskArray[i];
 
-            if (t != null)
+            if (t is not null)
             {
                 t.Terminal = result;
                 result.Tasks.Add(i + 1, t);
             }
         }
 
+        result.OnStart += () =>
+        {
+            System.Console.SetWindowSize(configuration.TerminalWidth, configuration.TerminalHeight);
+        };
+
         result.OnExit += async () =>
         {
-            await result.WriteAsync("Terminal closed...");
+            await result.WriteAsync(result.m_settings.TerminalExitMessage);
         };
 
         return result;
+    }
+
+    public static ConsoleTerminal CreateTerminal(IEnumerable<MainTask> tasks)
+    {
+        ConsoleTerminalSettings settings = new();
+
+        return CreateTerminal(tasks, settings);
     }
 
     public override Task PauseAsync()
@@ -42,19 +56,29 @@ public sealed class ConsoleTerminal : Terminal
         return Task.CompletedTask;
     }
 
-    public override async Task<string?> ReadAsync()
+    public override async Task<string> ReadAsync()
     {
         string? input = await System.Console.In.ReadLineAsync();
+
+        if(string.IsNullOrWhiteSpace(input))
+            return "";
+
         return input;
     }
 
     public override async Task SeparatorAsync()
     {
-        await WriteAsync(string.Empty.PadLeft(m_separatorLength, '-'));
+        await WriteAsync(string.Empty.PadLeft(m_settings.SeparatorLength, '-'));
     }
 
     public override async Task WriteAsync(string text)
     {
         await System.Console.Out.WriteLineAsync(text);
+    }
+
+    public override Task ClearAsync()
+    {
+        System.Console.Clear();
+        return Task.CompletedTask;
     }
 }
