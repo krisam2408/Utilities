@@ -37,6 +37,19 @@ public abstract class Terminal
         OnStart?.Invoke();
         int currentInstruction = -1;
 
+        m_settings.Validate();
+
+        foreach(TerminalMessage message in m_settings.Messages)
+        {
+            await WriteAsync($"{message.Level} - {message.Message}");
+        }
+
+        if (m_settings.HasErrors)
+        {
+            await WriteAsync(m_settings.TerminationMessage);
+            return;
+        }
+
         do
         {
             await SeparatorAsync();
@@ -85,8 +98,12 @@ public abstract class Terminal
     }
 
     public abstract Task SeparatorAsync();
+    
+    public abstract Task SeparatorAsync(TerminalColor color);
 
     public abstract Task WriteAsync(string text);
+    
+    public abstract Task WriteAsync(string text, TerminalColor color);
 
     public abstract Task<string> ReadAsync();
 

@@ -71,14 +71,52 @@ public sealed class ConsoleTerminal : Terminal
         await WriteAsync(string.Empty.PadLeft(m_settings.SeparatorLength, '-'));
     }
 
+    public override async Task SeparatorAsync(TerminalColor color)
+    {
+        ConsoleColor targetColor = TranslateColor(color);
+        ConsoleColor currentColor = System.Console.ForegroundColor;
+        System.Console.ForegroundColor = targetColor;
+
+        await SeparatorAsync();
+
+        System.Console.ForegroundColor = currentColor;
+    }
+
     public override async Task WriteAsync(string text)
     {
         await System.Console.Out.WriteLineAsync(text);
     }
 
-    public override Task ClearAsync()
+    public override async Task WriteAsync(string text, TerminalColor color)
+    {
+        ConsoleColor targetColor = TranslateColor(color);
+        ConsoleColor currentColor = System.Console.ForegroundColor;
+        System.Console.ForegroundColor = targetColor;
+
+        await WriteAsync(text);
+
+        System.Console.ForegroundColor = currentColor;
+    }
+
+    public override async Task ClearAsync()
     {
         System.Console.Clear();
-        return Task.CompletedTask;
+
+        await Task.Delay(1);
+    }
+
+    private static ConsoleColor TranslateColor(TerminalColor color)
+    {
+        return color.Name switch
+        {
+            "Black" => ConsoleColor.Black,
+            "Red" => ConsoleColor.Red,
+            "Yellow" => ConsoleColor.Yellow,
+            "Green" => ConsoleColor.Green,
+            "Cyan" => ConsoleColor.Cyan,
+            "Blue" => ConsoleColor.Blue,
+            "Magenta" => ConsoleColor.Magenta,
+            _ => ConsoleColor.White,
+        };
     }
 }
