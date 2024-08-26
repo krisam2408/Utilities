@@ -30,6 +30,8 @@ public sealed class ConsoleTerminal : Terminal
             }
         }
 
+        System.Console.CancelKeyPress += result.CancelHandler;
+
         result.OnStart += () =>
         {
             System.Console.SetWindowSize(configuration.TerminalWidth, configuration.TerminalHeight);
@@ -38,6 +40,7 @@ public sealed class ConsoleTerminal : Terminal
         result.OnExit += async () =>
         {
             await result.WriteAsync(result.m_settings.TerminalExitMessage);
+            System.Console.CancelKeyPress -= result.CancelHandler;
         };
 
         return result;
@@ -61,7 +64,7 @@ public sealed class ConsoleTerminal : Terminal
         string? input = await System.Console.In.ReadLineAsync();
 
         if(string.IsNullOrWhiteSpace(input))
-            return "";
+            input = "";
 
         return input;
     }
@@ -118,5 +121,28 @@ public sealed class ConsoleTerminal : Terminal
             "Magenta" => ConsoleColor.Magenta,
             _ => ConsoleColor.White,
         };
+    }
+
+    protected override Task WaitForCancelAsync(Task mainTask)
+    {
+        bool keepWaiting = true;
+
+        while (keepWaiting)
+        {
+            ConsoleKeyInfo key = System.Console.ReadKey();
+
+            if (key.Key == ConsoleKey.Escape)
+                InvokeTaskCancel();
+
+            keepWaiting = !mainTask.IsCompleted;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void CancelHandler(object? sender, ConsoleCancelEventArgs args)
+    {
+        args.Cancel = true;
+        InvokeTaskCancel();
     }
 }

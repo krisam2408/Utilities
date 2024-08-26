@@ -19,5 +19,5 @@ public abstract class MainTask
     }
 
     public abstract string TaskName { get; }
-    public abstract Task ExecuteAsync();
+    public abstract Task ExecuteAsync(CancellationToken cancelToken);
 }

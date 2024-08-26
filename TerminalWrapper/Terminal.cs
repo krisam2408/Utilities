@@ -4,18 +4,22 @@ namespace TerminalWrapper;
 
 public abstract class Terminal
 {
-    protected Dictionary<int, MainTask> Tasks { get; private set; }
+    private CancellationTokenSource? m_cancelSource = null;
+
+    protected Dictionary<int, MainTask> Tasks { get; private set; } = new();
     protected int Padding { get; set; }
     protected int ExitCommand { get; set; }
 
     public event Action? OnStart;
+    public event Action? OnTaskCancel;
     public event Action? OnExit;
+
+    public void InvokeTaskCancel() => OnTaskCancel?.Invoke();
 
     private readonly TerminalSettings m_settings;
 
     protected Terminal(TerminalSettings settings)
     {
-        Tasks = new();
         m_settings = settings;
     }
 
@@ -34,50 +38,19 @@ public abstract class Terminal
 
     public virtual async Task RunAsync()
     {
-        OnStart?.Invoke();
-        int currentInstruction = -1;
+        List<Task> tasks = [ ExecutionAsync() ];
 
-        m_settings.Validate();
+        tasks.Add(WaitForCancelAsync(tasks[0]));
 
-        foreach(TerminalMessage message in m_settings.Messages)
-        {
-            await WriteAsync($"{message.Level} - {message.Message}");
-        }
+        await Task.WhenAll(tasks);
+    }
 
-        if (m_settings.HasErrors)
-        {
-            await WriteAsync(m_settings.TerminationMessage);
+    private void CancelInvoked()
+    {
+        if (m_cancelSource is null)
             return;
-        }
 
-        do
-        {
-            await SeparatorAsync();
-            await WriteAsync(m_settings.CommandsMessage);
-            string key;
-
-            foreach (KeyValuePair<int, MainTask> kv in Tasks)
-            {
-                key = kv.Key.ToString().PadLeft(Padding);
-                await WriteAsync($"  {key} -> {kv.Value.TaskName}");
-            }
-
-            key = ExitCommand.ToString().PadLeft(Padding);
-
-            await WriteAsync($"  {key} -> {m_settings.ExitCommandMessage}");
-            await SeparatorAsync();
-
-            string? input = await ReadAsync();
-
-            currentInstruction = await ValidateInstruction(input);
-            await SeparatorAsync();
-
-            if (currentInstruction > -1)
-                await Tasks[currentInstruction].ExecuteAsync();
-
-        } while (currentInstruction >= -1);
-
-        OnExit?.Invoke();
+        m_cancelSource.Cancel();
     }
 
     private async Task<int> ValidateInstruction(string? input)
@@ -110,4 +83,79 @@ public abstract class Terminal
     public abstract Task PauseAsync();
 
     public abstract Task ClearAsync();
+
+    protected abstract Task WaitForCancelAsync(Task mainTask);
+
+    protected virtual async Task ExecutionAsync()
+    {
+        OnTaskCancel += CancelInvoked;
+
+        OnStart?.Invoke();
+        int currentInstruction = -1;
+
+        m_settings.Validate();
+
+        foreach (TerminalMessage message in m_settings.Messages)
+        {
+            await WriteAsync($"{message.Level} - {message.Message}");
+        }
+
+        if (m_settings.HasErrors)
+        {
+            await WriteAsync(m_settings.TerminationMessage);
+            return;
+        }
+
+        do
+        {
+            await SeparatorAsync();
+            await WriteAsync(m_settings.CommandsMessage);
+            string key;
+
+            foreach (KeyValuePair<int, MainTask> kv in Tasks)
+            {
+                key = kv.Key.ToString().PadLeft(Padding);
+                await WriteAsync($"  {key} -> {kv.Value.TaskName}");
+            }
+
+            key = ExitCommand.ToString().PadLeft(Padding);
+
+            await WriteAsync($"  {key} -> {m_settings.ExitCommandMessage}");
+            await SeparatorAsync();
+
+            string? input = await ReadAsync();
+
+            currentInstruction = await ValidateInstruction(input);
+
+            if (currentInstruction > -1)
+            {
+                await SeparatorAsync();
+
+                m_cancelSource = new();
+                try
+                {
+                    await Tasks[currentInstruction].ExecuteAsync(m_cancelSource.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    await WriteAsync(m_settings.TaskCancellationMessage);
+                }
+                finally
+                {
+                    m_cancelSource.Dispose();
+                    m_cancelSource = null;
+                }
+            }
+
+        } while (currentInstruction >= -1);
+
+        OnTaskCancel -= CancelInvoked;
+        OnExit?.Invoke();
+
+        if (m_cancelSource is not null)
+        {
+            m_cancelSource.Dispose();
+            m_cancelSource = null;
+        }
+    }
 }

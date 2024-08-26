@@ -6,6 +6,7 @@ public abstract class TerminalSettings
     public string ExitCommandMessage { get; set; } = "Exit";
     public string InvalidOptionMessage { get; set; } = "Not a valid option";
     public string TerminationMessage { get; set; } = "The terminal could not be executed due to errors";
+    public string TaskCancellationMessage { get; set; } = "Task cancelled by user";
 
     public List<TerminalMessage> Messages { get; private set; } = new();
     public bool HasInfo { get; private set; } = false;
