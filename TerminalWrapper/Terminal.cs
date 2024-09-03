@@ -23,7 +23,7 @@ public abstract class Terminal
         m_settings = settings;
     }
 
-    public static TerminalSettings? GetConfiguration<T>() where T : TerminalSettings
+    public static T? GetConfiguration<T>() where T : TerminalSettings
     {
         TerminalSettings? appSettings = null;
 
@@ -33,7 +33,7 @@ public abstract class Terminal
             appSettings = JsonConvert.DeserializeObject<T>(settings);
         }
 
-        return appSettings;
+        return (T?)appSettings;
     }
 
     public virtual async Task RunAsync()

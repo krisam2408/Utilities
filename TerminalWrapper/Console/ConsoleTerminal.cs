@@ -32,11 +32,6 @@ public sealed class ConsoleTerminal : Terminal
 
         System.Console.CancelKeyPress += result.CancelHandler;
 
-        result.OnStart += () =>
-        {
-            System.Console.SetWindowSize(configuration.TerminalWidth, configuration.TerminalHeight);
-        };
-
         result.OnExit += async () =>
         {
             await result.WriteAsync(result.m_settings.TerminalExitMessage);
