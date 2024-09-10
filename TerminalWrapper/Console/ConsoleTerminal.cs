@@ -34,8 +34,8 @@ public sealed class ConsoleTerminal : Terminal
 
         result.OnExit += async () =>
         {
-            await result.WriteAsync(result.m_settings.TerminalExitMessage);
             System.Console.CancelKeyPress -= result.CancelHandler;
+            await result.WriteAsync(result.m_settings.TerminalExitMessage);
         };
 
         return result;
