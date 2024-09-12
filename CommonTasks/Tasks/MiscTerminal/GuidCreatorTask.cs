@@ -1,15 +1,16 @@
 ﻿using TextCopy;
 using TerminalWrapper;
 
-namespace CommonTasks.Tasks;
+namespace CommonTasks.Tasks.MiscTerminal;
 
 internal sealed class GuidCreatorTask : MainTask
 {
     public override string TaskName => "Create Guid";
 
-    public override async Task ExecuteAsync()
+    public override async Task ExecuteAsync(CancellationToken cancelToken)
     {
-        string result = Guid.NewGuid()
+        string result = Guid
+            .NewGuid()
             .ToString();
 
         ClipboardService.SetText(result);

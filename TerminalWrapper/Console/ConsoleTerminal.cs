@@ -35,7 +35,12 @@ public sealed class ConsoleTerminal : Terminal
         result.OnExit += async () =>
         {
             System.Console.CancelKeyPress -= result.CancelHandler;
-            await result.WriteAsync(result.m_settings.TerminalExitMessage);
+
+            if(!string.IsNullOrWhiteSpace(result.m_settings.TerminalExitMessage))
+                await result.WriteAsync(result.m_settings.TerminalExitMessage);
+
+            if(result.m_settings.PauseAfterExit)
+                await result.PauseAsync();
         };
 
         return result;
@@ -118,26 +123,15 @@ public sealed class ConsoleTerminal : Terminal
         };
     }
 
-    protected override Task WaitForCancelAsync(Task mainTask)
-    {
-        bool keepWaiting = true;
-
-        while (keepWaiting)
-        {
-            ConsoleKeyInfo key = System.Console.ReadKey();
-
-            if (key.Key == ConsoleKey.Escape)
-                InvokeTaskCancel();
-
-            keepWaiting = !mainTask.IsCompleted;
-        }
-
-        return Task.CompletedTask;
-    }
-
     private void CancelHandler(object? sender, ConsoleCancelEventArgs args)
     {
         args.Cancel = true;
         InvokeTaskCancel();
+    }
+
+    public async Task WriteCenterAsync(string text)
+    {
+        int leftPadding = (int)(Math.Round(m_settings.SeparatorLength * 0.5) + Math.Round(text.Length * 0.5));
+        await WriteAsync(text.PadLeft(leftPadding));
     }
 }

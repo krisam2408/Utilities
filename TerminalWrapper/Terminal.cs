@@ -40,8 +40,6 @@ public abstract class Terminal
     {
         List<Task> tasks = [ ExecutionAsync() ];
 
-        tasks.Add(WaitForCancelAsync(tasks[0]));
-
         await Task.WhenAll(tasks);
     }
 
@@ -84,8 +82,6 @@ public abstract class Terminal
 
     public abstract Task ClearAsync();
 
-    protected abstract Task WaitForCancelAsync(Task mainTask);
-
     protected virtual async Task ExecutionAsync()
     {
         OnTaskCancel += CancelInvoked;
@@ -95,12 +91,14 @@ public abstract class Terminal
 
         m_settings.Validate();
 
-        foreach (TerminalMessage message in m_settings.Messages)
+        TerminalMessage[] messages = m_settings.GetMessages();
+
+        foreach (TerminalMessage message in messages)
         {
             await WriteAsync($"{message.Level} - {message.Message}");
         }
 
-        if (m_settings.HasErrors)
+        if (m_settings.HasErrors())
         {
             await WriteAsync(m_settings.TerminationMessage);
             return;

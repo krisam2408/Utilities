@@ -1,8 +1,9 @@
 ﻿using MorganaChains;
+using MorganaChains.Settings;
 using TerminalWrapper;
 using TextCopy;
 
-namespace CommonTasks.Tasks;
+namespace CommonTasks.Tasks.MorganaTerminal;
 
 public sealed class EncryptStringTask : MainTask
 {
@@ -17,7 +18,7 @@ public sealed class EncryptStringTask : MainTask
         m_secretKey = secretKey;
     }
 
-    public override async Task ExecuteAsync()
+    public override async Task ExecuteAsync(CancellationToken cancelToken)
     {
         await Terminal.WriteAsync("Write a string to encrypt:");
         string? phraseInput = await Terminal.ReadAsync();

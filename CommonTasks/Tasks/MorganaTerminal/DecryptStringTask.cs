@@ -1,8 +1,9 @@
 ﻿using MorganaChains;
+using MorganaChains.Settings;
 using TerminalWrapper;
 using TextCopy;
 
-namespace CommonTasks.Tasks;
+namespace CommonTasks.Tasks.MorganaTerminal;
 
 public sealed class DecryptStringTask : MainTask
 {
@@ -17,7 +18,7 @@ public sealed class DecryptStringTask : MainTask
         m_secretKey = secretKey;
     }
 
-    public override async Task ExecuteAsync()
+    public override async Task ExecuteAsync(CancellationToken cancelToken)
     {
         await Terminal.WriteAsync("Write a string to decrypt:");
         string? phraseInput = await Terminal.ReadAsync();
@@ -31,16 +32,21 @@ public sealed class DecryptStringTask : MainTask
         AESMorganaSettings morganaSettings = new(m_publicKey, m_secretKey);
         AESMorgana morgana = new(morganaSettings);
 
-        string? result = morgana.Decrypt(phraseInput);
-
-        if (string.IsNullOrWhiteSpace(result))
+        if(morgana.TryDecrypt(phraseInput, out string result))
         {
-            await Terminal.WriteAsync("Not possible to decrypt");
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                await Terminal.WriteAsync("Not possible to decrypt");
+                return;
+            }
+
+            ClipboardService.SetText(result);
+
+            await Terminal.WriteAsync($"Decrypted result \"{result}\" copied to Clipboard!");
+
             return;
         }
 
-        ClipboardService.SetText(result);
-
-        await Terminal.WriteAsync($"Decrypted result \"{result}\" copied to Clipboard!");
+        await Terminal.WriteAsync("Input could not be decrypted");
     }
 }

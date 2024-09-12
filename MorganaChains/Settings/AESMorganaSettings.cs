@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MorganaChains.DataTransfer;
 using System.Text;
 
-namespace MorganaChains;
+namespace MorganaChains.Settings;
 
 public sealed class AESMorganaSettings
 {
@@ -30,6 +31,8 @@ public sealed class AESMorganaSettings
         PublicKey = Encode(publicKey); 
         SecretKey = Encode(secretKey);
     }
+
+    public AESMorganaSettings(KeyPair keyPair) : this(keyPair.PublicKey, keyPair.SecretKey) { }
 
     private static byte[] Encode(string key)
     {

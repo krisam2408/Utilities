@@ -1,25 +1,43 @@
 ﻿using CommonTasks.Model;
 using CommonTasks.Tasks;
-using MorganaChains;
-using Newtonsoft.Json;
+using System.Runtime.Versioning;
 using TerminalWrapper;
+using TerminalWrapper.CommonTasks;
 using TerminalWrapper.Console;
 
-string configuration = await File.ReadAllTextAsync("appSettings.json");
-AppSettings settings = JsonConvert.DeserializeObject<AppSettings>(configuration);
+namespace CommonTasks;
 
-MainTask[] tasks =
-[
-    new GuidCreatorTask(),
-    new GeneratePasswordTask(),
-    new GenerateHashTask(HashFormat.MD5),
-    new GenerateHashTask(HashFormat.SHA256),
-    new GenerateHashTask(HashFormat.SHA384),
-    new GenerateHashTask(HashFormat.SHA512),
-    new EncryptStringTask(settings.AES.PublicKey, settings.AES.SecretKey),
-    new DecryptStringTask(settings.AES.PublicKey, settings.AES.SecretKey),
-];
+[SupportedOSPlatform("windows")]
+public static class Program
+{
+    public static async Task Main()
+    {
+        AppSettings? settings = Terminal.GetConfiguration<AppSettings>();
 
-ConsoleTerminal terminal = ConsoleTerminal.CreateTerminal(tasks);
+        if (settings is null)
+        {
+            await Console.Out.WriteLineAsync("App configuration could not be set and will be terminated");
+            await Console.Out.WriteLineAsync("Press any key to close this window");
+            Console.ReadKey();
+            return;
+        }
 
-await terminal.RunAsync();
+        MainTask[] tasks =
+        [
+            new MiscTerminalTask(),
+            new MorganaTerminalTask(settings.AES),
+            new ClearTerminalTask()
+        ];
+
+        Terminal terminal = ConsoleTerminal.CreateTerminal(tasks, settings);
+
+        terminal.OnStart += async () =>
+        {
+            await terminal.SeparatorAsync();
+            await terminal.WriteAsync("Common Tasks");
+            await terminal.WriteAsync($"Version {settings.Version}");
+        };
+
+        await terminal.RunAsync();
+    }
+}

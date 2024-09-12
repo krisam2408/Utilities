@@ -2,18 +2,18 @@
 using TerminalWrapper;
 using TextCopy;
 
-namespace CommonTasks.Tasks
+namespace CommonTasks.Tasks.MorganaTerminal
 {
     public sealed class GeneratePasswordTask : MainTask
     {
         public override string TaskName => "Generate Password";
 
-        public override async Task ExecuteAsync()
+        public override async Task ExecuteAsync(CancellationToken cancelToken)
         {
             await Terminal.WriteAsync("Define password length:");
             string? lengthInput = await Terminal.ReadAsync();
 
-            if(int.TryParse(lengthInput, out int length))
+            if (int.TryParse(lengthInput, out int length))
             {
                 Morgana morgana = new();
                 string result = morgana.GeneratePasswordOfLength(length);

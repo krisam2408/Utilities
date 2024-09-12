@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using MorganaChains.Settings;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MorganaChains;
@@ -28,8 +29,9 @@ public sealed class AESMorgana
         }
     }
 
-    public string? Decrypt(string text)
+    public bool TryDecrypt(string text, out string decrypted)
     {
+        decrypted = "";
         text = text.Replace(" ", "+");
         byte[] textByteArray = Convert.FromBase64String(text);
 
@@ -41,11 +43,13 @@ public sealed class AESMorgana
             {
                 cs.Write(textByteArray, 0, textByteArray.Length);
                 cs.FlushFinalBlock();
-                return Encoding.UTF8.GetString(ms.ToArray());
+                decrypted = Encoding.UTF8.GetString(ms.ToArray());
+                return true;
             }
-        }catch
+        }
+        catch
         {
-            return null;
+            return false;
         }
     }
 }

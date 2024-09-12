@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Resources\CapacitacionMicrosoftTeams.pdf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,13 +19,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="PDFtoImage" Version="4.1.0" />
     <PackageReference Include="TextCopy" Version="6.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MorganaChains\MorganaChains.csproj" />
     <ProjectReference Include="..\TerminalWrapper\TerminalWrapper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\CapacitacionMicrosoftTeams.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

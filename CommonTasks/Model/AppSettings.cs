@@ -1,12 +1,11 @@
-﻿namespace CommonTasks.Model;
+﻿using MorganaChains.DataTransfer;
+using TerminalWrapper.Console;
 
-public struct AppSettings
+namespace CommonTasks.Model;
+
+public sealed class AppSettings : ConsoleTerminalSettings
 {
-    public AESSettings AES { get; set; }
+    public KeyPair AES { get; set; }
 
-    public struct AESSettings
-    {
-        public string PublicKey { get; set; }
-        public string SecretKey { get; set; }
-    }
+    
 }

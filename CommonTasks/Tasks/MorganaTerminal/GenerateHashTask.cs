@@ -2,7 +2,7 @@
 using TerminalWrapper;
 using TextCopy;
 
-namespace CommonTasks.Tasks;
+namespace CommonTasks.Tasks.MorganaTerminal;
 
 public sealed class GenerateHashTask : MainTask
 {
@@ -12,10 +12,10 @@ public sealed class GenerateHashTask : MainTask
 
     public GenerateHashTask(HashFormat format) : base()
     {
-        m_format = format ; 
+        m_format = format;
     }
 
-    public override async Task ExecuteAsync()
+    public override async Task ExecuteAsync(CancellationToken cancelToken)
     {
         await Terminal.WriteAsync("Write a phrase to hash:");
         string? phraseInput = await Terminal.ReadAsync();
