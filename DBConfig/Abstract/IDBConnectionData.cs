@@ -1,4 +1,6 @@
-﻿namespace DBConfig.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace DBConfig.Abstract;
 
 public interface IDBConnectionData
 {
@@ -6,11 +8,5 @@ public interface IDBConnectionData
     public string ConnectionType { get; set; }
     public string ConnectionString { get; }
 
-    public enum ConnectionTypeName
-    {
-        ConnectionString,
-        PG,
-        SQS,
-        SQSTrusted
-    }
+    public void CreateConnection(DbContextOptionsBuilder options);
 }
