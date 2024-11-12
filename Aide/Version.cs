@@ -2,11 +2,11 @@
 
 namespace Aide;
 
-public class AideVersion
+public class Version
 {
     private readonly int[] m_version;
 
-    public AideVersion(string? version)
+    public Version(string? version)
     {
         if (string.IsNullOrWhiteSpace(version))
             version = "1.1.1";

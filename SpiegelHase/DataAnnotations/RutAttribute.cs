@@ -32,7 +32,7 @@ public sealed class RutAttribute : ValidationAttribute
         if (rutParts[1].Length != 1)
             return new(GetErrorMessage(displayName));
 
-        if (!AideMath.BetweenInc(rutParts[0].Length, 7, 9))
+        if (!Aide.Math.BetweenInc(rutParts[0].Length, 7, 9))
             return new(GetErrorMessage(displayName));
 
         int[] serie = [2, 3, 4, 5, 6, 7];
@@ -64,7 +64,7 @@ public sealed class RutAttribute : ValidationAttribute
 
         int div = sum / 11;
         div *= 11;
-        int rest = Math.Abs(sum - div);
+        int rest = System.Math.Abs(sum - div);
         int dv = 11 - rest;
 
         bool result = dv switch

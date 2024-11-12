@@ -1,10 +1,10 @@
 ﻿namespace Aide;
 
-public static class AideRandom
+public static class Random
 {
-    private static readonly Random m_random = new();
+    private static readonly System.Random m_random = new();
 
-    public static DateTime Random(DateTime start, DateTime end)
+    public static DateTime RandomDate(DateTime start, DateTime end)
     {
         int year = m_random.Next(start.Year, end.Year + 1);
         
@@ -18,7 +18,7 @@ public static class AideRandom
 
         int handleDay()
         {
-            if (AideBool.AndCheck(year == end.Year, month == end.Month))
+            if (Bool.AndCheck(year == end.Year, month == end.Month))
                 return m_random.Next(1, end.Day - 1);
             return m_random.Next(0, DateTime.DaysInMonth(year, month)) + 1;
         }
@@ -26,7 +26,7 @@ public static class AideRandom
 
         int handleHour()
         {
-            if (AideBool.AndCheck(year == end.Year, month == end.Month, day == end.Day))
+            if (Bool.AndCheck(year == end.Year, month == end.Month, day == end.Day))
                 return m_random.Next(0, end.Hour);
             return m_random.Next(0, 24);
         }
@@ -34,7 +34,15 @@ public static class AideRandom
 
         int handleMinute()
         {
-            if (AideBool.AndCheck(year == end.Year, month == end.Month, day == end.Day, hour == end.Hour))
+            bool[] checks =
+            [
+                year == end.Year,
+                month == end.Month,
+                day == end.Day,
+                hour == end.Hour
+            ];
+
+            if (Bool.AndCheck(checks))
                 return m_random.Next(1, end.Minute);
             return m_random.Next(0, 60);
         }
@@ -42,8 +50,18 @@ public static class AideRandom
 
         int handleSecond()
         {
-            if (AideBool.AndCheck(year == end.Year, month == end.Month, day == end.Day, hour == end.Hour, minute == end.Minute))
+            bool[] checks = 
+            [
+                year == end.Year,
+                month == end.Month,
+                day == end.Day,
+                hour == end.Hour,
+                minute == end.Minute
+            ];
+
+            if (Bool.AndCheck(checks))
                 return m_random.Next(1, end.Second);
+
             return m_random.Next(0, 60);
         }
         int second = handleSecond();
@@ -52,7 +70,7 @@ public static class AideRandom
         return result;
     }
 
-    public static TimeSpan Random(TimeSpan min, TimeSpan max)
+    public static TimeSpan RandomTimeSpan(TimeSpan min, TimeSpan max)
     {
         int minS = (int)min.TotalSeconds;
         int maxS = (int)max.TotalSeconds;
@@ -62,12 +80,12 @@ public static class AideRandom
         return result;
     }
 
-    public static int Random(int min, int max)
+    public static int RandomInt(int min, int max)
     {
         return m_random.Next(min, max + 1);
     }
 
-    public static bool Random(float trueRatio)
+    public static bool RandomFloat(float trueRatio)
     {
         trueRatio = trueRatio.Clamp(0f, 1f);
         float result = m_random.Next(101) / 100f;
@@ -75,7 +93,7 @@ public static class AideRandom
         return result <= trueRatio;
     }
 
-    public static T Random<T>(this IEnumerable<T> list)
+    public static T RandomItem<T>(this IEnumerable<T> list)
     {
         T[] array = list.ToArray();
         int index = m_random.Next(list.Count());

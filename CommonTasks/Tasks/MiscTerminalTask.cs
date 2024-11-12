@@ -16,6 +16,7 @@ public sealed class MiscTerminalTask : MainTask
         MainTask[] tasks =
         [
             new GuidCreatorTask(),
+            new ByteParseTask(),
             new PDFToJPGTask(),
             new ClearTerminalTask()
         ];

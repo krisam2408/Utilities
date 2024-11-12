@@ -1,6 +1,6 @@
 ﻿namespace Aide;
 
-public static class AideMath
+public static class Math
 {
     public static int Min(this int value, int min)
     {
@@ -61,7 +61,18 @@ public static class AideMath
         return sum / len;
     }
 
-    public static TimeSpan Average(this IEnumerable<TimeSpan> values)
+    public static bool DivisibleBy(this int num, int div)
+    {
+        if(num == 0)
+            return false;
+
+        if(num % div == 0)
+            return true;
+
+        return false;
+    }
+
+    public static TimeSpan AverageTimeSpan(this IEnumerable<TimeSpan> values)
     {
         IEnumerable<int> secondsArray = values
             .Select(x => (int)x.TotalSeconds);

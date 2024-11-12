@@ -1,6 +1,6 @@
 ﻿namespace Aide;
 
-public static class AideBool
+public static class Bool
 {
     public static bool AndCheck(params bool[] args)
     {
